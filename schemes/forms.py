@@ -12,6 +12,7 @@ class EligibilityForm(forms.Form):
     )
     gender = forms.ChoiceField(
         choices=[
+            ("Select Gender","Select"),
             ("male", "Male"),
             ("female", "Female"),
             ("other", "Other"),
@@ -26,21 +27,24 @@ class EligibilityForm(forms.Form):
 
     occupation = forms.ChoiceField(
         choices=[
+            ("Select Occupation", "Select Occupation"),
             ("farmer", "Farmer"),
             ("labourer", "Labourer"),
             ("student", "Student"),
             ("unemployed", "Unemployed"),
+            ("street_vendor", "Street Vendor"),
+            ("other", "Other"),
         ],
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
     land_ownership = forms.ChoiceField(
-        choices=[("yes", "Yes"), ("no", "No")],
+        choices=[("Select","Select"),("yes", "Yes"), ("no", "No")],
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
     disability_status = forms.ChoiceField(
-        choices=[("yes", "Yes"), ("no", "No")],
+        choices=[("Select","Select"),("yes", "Yes"), ("no", "No")],
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 

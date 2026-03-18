@@ -10,7 +10,7 @@ class Command(BaseCommand):
         self.stdout.write("Seeding schemes...")
 
         # ---------------- PM KISAN ----------------
-        pm_kisan, _ = Scheme.objects.get_or_create(
+        pm_kisan, _ = Scheme.objects.update_or_create(
             name="PM Kisan",
             defaults={
                 "description": "Income support scheme for farmers",
@@ -20,33 +20,33 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=pm_kisan,
             field_name="occupation",
             operator="eq",
             value="farmer"
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=pm_kisan,
             field_name="income",
             operator="lte",
             value="200000"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=pm_kisan,
             document_name="Aadhaar Card"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=pm_kisan,
             document_name="Land Ownership Proof"
         )
 
 
         # ---------------- AYUSHMAN BHARAT ----------------
-        ayushman, _ = Scheme.objects.get_or_create(
+        ayushman, _ = Scheme.objects.update_or_create(
             name="Ayushman Bharat",
             defaults={
                 "description": "Health insurance coverage up to ₹5 lakh per family per year",
@@ -56,26 +56,26 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=ayushman,
             field_name="income",
             operator="lte",
             value="300000"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=ayushman,
             document_name="Aadhaar Card"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=ayushman,
             document_name="Ration Card"
         )
 
 
         # ---------------- PM AWAS YOJANA ----------------
-        pm_awas, _ = Scheme.objects.get_or_create(
+        pm_awas, _ = Scheme.objects.update_or_create(
             name="PM Awas Yojana",
             defaults={
                 "description": "Affordable housing scheme for low income families",
@@ -85,67 +85,67 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=pm_awas,
             field_name="income",
             operator="lte",
             value="300000"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=pm_awas,
             document_name="Aadhaar Card"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=pm_awas,
             document_name="Income Certificate"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=pm_awas,
             document_name="Residence Proof"
         )
 
 
         # ---------------- BETI BACHAO BETI PADHAO ----------------
-        beti_bachao, _ = Scheme.objects.get_or_create(
+        beti_bachao, _ = Scheme.objects.update_or_create(
             name="Beti Bachao Beti Padhao",
             defaults={
                 "description": "Government initiative to support girl child education and welfare",
-                "official_link": "https://wcd.gov.in/women/beti-bachao-beti-padhao",
+                "official_link": "https://www.betibachaobetipadhao.org",
                 "category": "Education",
                 "is_central": True
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=beti_bachao,
             field_name="gender",
             operator="eq",
             value="female"
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=beti_bachao,
             field_name="age",
             operator="lte",
             value="18"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=beti_bachao,
             document_name="Birth Certificate"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=beti_bachao,
             document_name="Aadhaar Card"
         )
 
 
         # ---------------- MUDRA LOAN ----------------
-        mudra, _ = Scheme.objects.get_or_create(
+        mudra, _ = Scheme.objects.update_or_create(
             name="Mudra Loan",
             defaults={
                 "description": "Loan scheme for small entrepreneurs and businesses",
@@ -155,63 +155,64 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=mudra,
             field_name="income",
             operator="lte",
             value="500000"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=mudra,
             document_name="Aadhaar Card"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=mudra,
             document_name="Bank Passbook"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=mudra,
             document_name="Business Plan"
         )
 
 
         # ---------------- SKILL INDIA ----------------
-        skill_india, _ = Scheme.objects.get_or_create(
+        skill_india, _ = Scheme.objects.update_or_create(
             name="Skill India",
             defaults={
                 "description": "Skill development program for youth",
-                "is_central": True
+                "is_central": True,
+                "official_link": "https://www.skillindiadigital.gov.in/home"
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=skill_india,
             field_name="age",
             operator="gte",
             value="18"
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=skill_india,
             field_name="age",
             operator="lte",
             value="45"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=skill_india,
             document_name="Aadhaar Card"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=skill_india,
             document_name="Education Certificate"
         )
                 # ---------------- PM FASAL BIMA YOJANA ----------------
-        pm_fasal, _ = Scheme.objects.get_or_create(
+        pm_fasal, _ = Scheme.objects.update_or_create(
             name="PM Fasal Bima Yojana",
             defaults={
                 "description": "Crop insurance scheme for farmers",
@@ -221,26 +222,26 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=pm_fasal,
             field_name="occupation",
             operator="eq",
             value="farmer"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=pm_fasal,
             document_name="Aadhaar Card"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=pm_fasal,
             document_name="Land Ownership Proof"
         )
 
 
         # ---------------- ATAL PENSION YOJANA ----------------
-        atal_pension, _ = Scheme.objects.get_or_create(
+        atal_pension, _ = Scheme.objects.update_or_create(
             name="Atal Pension Yojana",
             defaults={
                 "description": "Pension scheme for workers in the unorganized sector",
@@ -250,28 +251,28 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=atal_pension,
             field_name="age",
             operator="gte",
             value="18"
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=atal_pension,
             field_name="age",
             operator="lte",
             value="40"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=atal_pension,
             document_name="Aadhaar Card"
         )
 
 
         # ---------------- UJJWALA YOJANA ----------------
-        ujjwala, _ = Scheme.objects.get_or_create(
+        ujjwala, _ = Scheme.objects.update_or_create(
             name="PM Ujjwala Yojana",
             defaults={
                 "description": "Free LPG connection for women from low-income households",
@@ -281,33 +282,33 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=ujjwala,
             field_name="gender",
             operator="eq",
             value="female"
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=ujjwala,
             field_name="income",
             operator="lte",
             value="200000"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=ujjwala,
             document_name="Aadhaar Card"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=ujjwala,
             document_name="Ration Card"
         )
 
 
         # ---------------- PM SVANIDHI ----------------
-        svanidhi, _ = Scheme.objects.get_or_create(
+        svanidhi, _ = Scheme.objects.update_or_create(
             name="PM SVANidhi",
             defaults={
                 "description": "Loan scheme for street vendors",
@@ -317,19 +318,19 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=svanidhi,
             field_name="occupation",
             operator="eq",
             value="street_vendor"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=svanidhi,
             document_name="Aadhaar Card"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=svanidhi,
             document_name="Vendor Certificate"
         )
@@ -338,7 +339,7 @@ class Command(BaseCommand):
         # ---------------- MAHARASHTRA SCHEMES ----------------
 
         # Mahatma Jyotiba Phule Jan Arogya Yojana
-        mjp, _ = Scheme.objects.get_or_create(
+        mjp, _ = Scheme.objects.update_or_create(
             name="Mahatma Jyotiba Phule Jan Arogya Yojana",
             defaults={
                 "description": "Health insurance scheme for Maharashtra residents",
@@ -348,26 +349,26 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=mjp,
             field_name="income",
             operator="lte",
             value="100000"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=mjp,
             document_name="Aadhaar Card"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=mjp,
             document_name="Income Certificate"
         )
 
 
         # Shetkari Apghat Vima Yojana
-        shetkari_vima, _ = Scheme.objects.get_or_create(
+        shetkari_vima, _ = Scheme.objects.update_or_create(
             name="Shetkari Apghat Vima Yojana",
             defaults={
                 "description": "Insurance scheme for farmers in Maharashtra",
@@ -376,21 +377,21 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=shetkari_vima,
             field_name="occupation",
             operator="eq",
             value="farmer"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=shetkari_vima,
             document_name="Aadhaar Card"
         )
 
 
         # Rajarshi Shahu Maharaj Scholarship
-        shahu_scholarship, _ = Scheme.objects.get_or_create(
+        shahu_scholarship, _ = Scheme.objects.update_or_create(
             name="Rajarshi Shahu Maharaj Scholarship",
             defaults={
                 "description": "Scholarship scheme for students in Maharashtra",
@@ -399,26 +400,26 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=shahu_scholarship,
             field_name="income",
             operator="lte",
             value="800000"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=shahu_scholarship,
             document_name="Income Certificate"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=shahu_scholarship,
             document_name="Education Certificate"
         )
 
 
         # Gharkul Yojana
-        gharkul, _ = Scheme.objects.get_or_create(
+        gharkul, _ = Scheme.objects.update_or_create(
             name="Pandit Dindayal Upadhyay Gharkul Yojana",
             defaults={
                 "description": "Housing scheme for rural poor families in Maharashtra",
@@ -427,26 +428,26 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=gharkul,
             field_name="income",
             operator="lte",
             value="200000"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=gharkul,
             document_name="Income Certificate"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=gharkul,
             document_name="Residence Proof"
         )
 
 
         # Krushi Pump Yojana
-        krushi_pump, _ = Scheme.objects.get_or_create(
+        krushi_pump, _ = Scheme.objects.update_or_create(
             name="Krushi Pump Yojana",
             defaults={
                 "description": "Subsidy scheme for agricultural water pumps",
@@ -455,14 +456,14 @@ class Command(BaseCommand):
             }
         )
 
-        EligibilityRule.objects.get_or_create(
+        EligibilityRule.objects.update_or_create(
             scheme=krushi_pump,
             field_name="occupation",
             operator="eq",
             value="farmer"
         )
 
-        RequiredDocument.objects.get_or_create(
+        RequiredDocument.objects.update_or_create(
             scheme=krushi_pump,
             document_name="Land Ownership Proof"
         )

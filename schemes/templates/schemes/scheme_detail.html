@@ -6,7 +6,17 @@
 
 <div class="card p-4 shadow mb-4">
     <h4>Description</h4>
-    <p>{{ scheme.description }}</p>
+<p>
+
+{% if request.session.lang == "mr" and scheme.description_mr %}
+  {{ scheme.description_mr }}
+{% elif request.session.lang == "hi" and scheme.description_hi %}
+  {{ scheme.description_hi }}
+{% else %}
+  {{ scheme.description }}
+{% endif %}
+
+</p>
 </div>
 
 <div class="card p-4 shadow mb-4">
@@ -31,6 +41,15 @@
         {% endfor %}
     </ul>
 
+</div>
+
+<div class="mt-3">
+  <p>
+  <strong>Official Website:</strong>
+  <a href="{{ scheme.official_link }}" target="_blank">
+    {{ scheme.official_link }}
+  </a>
+</p>
 </div>
 
 {% endblock %}

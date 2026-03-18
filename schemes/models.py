@@ -22,6 +22,8 @@ class Scheme(models.Model):
     is_central = models.BooleanField(default=True)
 
     states = models.ManyToManyField("State", blank=True)
+    description_mr = models.TextField(blank=True, null=True)
+    description_hi = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name

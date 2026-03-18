@@ -11,7 +11,28 @@ from django.utils.timezone import now
 from django.db.models import Count
 from django.contrib.auth.models import User
 from django.contrib.auth import login
+from django.views.decorators.cache import never_cache
+from django.utils.decorators import method_decorator
+from django.contrib.auth import logout
 
+
+
+
+def no_cache(view_func):
+    decorated_view_func = never_cache(view_func)
+    return decorated_view_func
+# -------------------------------
+# Custom logout Page
+# -------------------------------
+
+@never_cache
+def custom_logout(request):
+    logout(request)
+    response = redirect('home')
+    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response
 
 # -------------------------------
 # Landing Page
@@ -25,28 +46,43 @@ def home(request):
 # Eligibility Form
 # -------------------------------
 
-@login_required
+@never_cache
+@login_required(login_url='login')
 def check_scheme(request):
 
-    results = None
-    eligible_count = 0
-    not_eligible_count = 0
-
     if request.method == "POST":
-
         form = EligibilityForm(request.POST)
 
         if form.is_valid():
-
             user_data = form.cleaned_data
+
             results = sorted(
                 evaluate_schemes(user_data),
                 key=lambda x: not x["is_eligible"]
             )
 
-            eligible_count = sum(1 for r in results if r["is_eligible"])
-            not_eligible_count = len(results) - eligible_count
+            # Save in session
+            serialized_results = []
 
+            for r in results:
+                serialized_results.append({
+                 "scheme_id": r["scheme"].id,
+                "scheme_name": r["scheme"].name,
+                "description": r["scheme"].description,
+                 "is_eligible": r["is_eligible"],
+                "rules": r["rules"]
+                })
+
+            request.session["results"] = serialized_results
+            safe_form_data = user_data.copy()
+
+            # Convert state object to string or id
+            if safe_form_data.get("state"):
+                safe_form_data["state"] = safe_form_data["state"].name   # or .id
+
+            request.session["form_data"] = safe_form_data
+
+            # Save history (your existing logic)
             for result in results:
                 EligibilityCheck.objects.update_or_create(
                     user=request.user,
@@ -54,8 +90,32 @@ def check_scheme(request):
                     defaults={"is_eligible": result["is_eligible"]}
                 )
 
+            return redirect("check_scheme")   # 🔥 IMPORTANT
+
     else:
-        form = EligibilityForm()
+        # GET request → load from session
+        form_data = request.session.get("form_data")
+        results = request.session.get("results", [])
+
+        if form_data:
+            if form_data and form_data.get("state"):
+                from .models import State
+            try:
+                form_data["state"] = State.objects.get(name=form_data["state"])
+            except:
+             pass
+
+            form = EligibilityForm(initial=form_data)
+        else:
+            form = EligibilityForm()
+
+    # Handle counts safely
+    if results:
+        eligible_count = sum(1 for r in results if r["is_eligible"])
+        not_eligible_count = len(results) - eligible_count
+    else:
+        eligible_count = 0
+        not_eligible_count = 0
 
     return render(request, "schemes/check.html", {
         "form": form,
@@ -64,12 +124,12 @@ def check_scheme(request):
         "not_eligible_count": not_eligible_count,
     })
 
-
 # -------------------------------
 # User Dashboard
 # -------------------------------
 
-@login_required
+@never_cache
+@login_required(login_url='login')
 def dashboard(request):
 
     checks = EligibilityCheck.objects.filter(
@@ -85,7 +145,8 @@ def dashboard(request):
 # Download PDF Report
 # -------------------------------
 
-@login_required
+@never_cache
+@login_required(login_url='login')
 def download_report(request):
 
     response = HttpResponse(content_type="application/pdf")
@@ -149,7 +210,8 @@ def download_report(request):
 # Analytics Dashboard
 # -------------------------------
 
-@login_required
+@never_cache
+@login_required(login_url='login')
 def analytics_dashboard(request):
 
     total_users = User.objects.count()
@@ -172,7 +234,6 @@ def analytics_dashboard(request):
         "eligible_count": eligible_count,
         "not_eligible_count": not_eligible_count,
     }
-
     return render(request, "schemes/analytics.html", context)
 
 
@@ -216,3 +277,12 @@ def scheme_detail(request, scheme_id):
     }
 
     return render(request, "schemes/scheme_detail.html", context)
+
+def set_language(request):
+    lang = request.GET.get("lang", "en")
+
+    if lang not in ["en", "mr", "hi"]:
+        lang = "en"
+
+    request.session["lang"] = lang
+    return redirect(request.META.get("HTTP_REFERER", "/"))

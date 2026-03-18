@@ -14,7 +14,13 @@
 <div class="row justify-content-center">
 <div class="col-md-8">
 
-<h3 class="mb-3">Check Scheme Eligibility</h3>
+{% if request.session.lang == "mr" %}
+  <h3>पात्रता तपासा</h3>
+{% elif request.session.lang == "hi" %}
+  <h3>पात्रता जांचें</h3>
+{% else %}
+  <h3>Check Scheme Eligibility</h3>
+{% endif %}
 
 <div class="card shadow-lg p-4">
 
@@ -96,7 +102,7 @@ Total Schemes Checked: <strong>{{ results|length }}</strong>
 
 <h5 class="card-title">
 
-{{ result.scheme.name }}
+{{ result.scheme_name }}
 
 {% if result.is_eligible %}
 <span class="badge bg-success ms-2">Eligible</span>
@@ -106,7 +112,17 @@ Total Schemes Checked: <strong>{{ results|length }}</strong>
 
 </h5>
 
-<p class="text-muted mb-3">{{ result.scheme.description }}</p>
+<p class="text-muted">
+
+{% if request.session.lang == "mr" and result.scheme.description_mr %}
+  {{ result.scheme.description_mr }}
+{% elif request.session.lang == "hi" and result.scheme.description_hi %}
+  {{ result.scheme.description_hi }}
+{% else %}
+  {{ result.description}}
+{% endif %}
+
+</p>
 
 
 <ul class="list-group list-group-flush">
@@ -148,7 +164,7 @@ Total Schemes Checked: <strong>{{ results|length }}</strong>
 </ul>
 
 
-<a href="/scheme/{{ result.scheme.id }}/" class="btn btn-outline-primary btn-sm mt-3">
+<a href="/scheme/{{ result.scheme_id }}/" class="btn btn-outline-primary btn-sm mt-3">
 View Details
 </a>
 
